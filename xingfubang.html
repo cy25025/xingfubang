@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宇宙第一·好哥们幸福榜</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #cbebff 70%, #a1d9ff 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .leaderboard-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #005A9C; /* 深蓝色标题 */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .leaderboard-title h1 {
+            font-size: 2.8em;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .leaderboard-title p {
+            font-size: 1.1em;
+            color: #007BFF; /* 宝蓝色副标题 */
+            margin-top: 0;
+        }
+
+        .leaderboard-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .friend-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 90, 156, 0.15);
+            padding: 20px 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 10px solid; /* 用于等级颜色条 */
+        }
+
+        .friend-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 12px 35px rgba(0, 90, 156, 0.2);
+        }
+
+        /* Rank-specific styling */
+        .rank-1 { border-left-color: #FFD700; /* Gold */ }
+        .rank-2 { border-left-color: #C0C0C0; /* Silver */ }
+        .rank-3 { border-left-color: #CD7F32; /* Bronze */ }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .rank-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+
+        .name-title-group h2 {
+            margin: 0;
+            font-size: 1.8em;
+            color: #1A237E; /* 深蓝近黑 */
+        }
+        .name-title-group .level {
+            font-size: 0.9em;
+            color: #555;
+            font-style: italic;
+            background-color: #e6f7ff;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+
+        .friend-card h3 {
+            font-size: 1.1em;
+            color: #005A9C;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 5px;
+        }
+
+        .friend-card .title-game {
+            font-weight: bold;
+            color: #E65100; /* 橙色强调 */
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .friend-card ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .friend-card ul li {
+            background-color: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 0.95em;
+            color: #444;
+            border-left: 3px solid #007BFF;
+        }
+        .friend-card ul li strong {
+            color: #0056b3;
+        }
+
+        .location-bonus {
+            font-size: 0.9em;
+            color: #28a745; /* 绿色 */
+            margin-top: 10px;
+            padding: 5px;
+            background-color: #e9f5ee;
+            border-radius: 5px;
+        }
+        .location-bonus strong {
+            color: #1e7e34;
+        }
+
+        .happiness-index {
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .happiness-index .stars {
+            color: #FFC107; /* Amber for stars */
+            letter-spacing: 2px;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #777;
+        }
+        .footer-note strong {
+            color: #555;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .leaderboard-title h1 {
+                font-size: 2.2em;
+            }
+            .friend-card {
+                padding: 15px;
+            }
+            .name-title-group h2 {
+                font-size: 1.5em;
+            }
+            .rank-icon {
+                font-size: 2em;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="leaderboard-title">
+        <h1>宇宙第一·好哥们幸福榜</h1>
+        <p>当前版本: V3.0 众神归位·荣耀永固</p>
+        </div>
+
+    <div class="leaderboard-container">
+
+        <div class="friend-card rank-1">
+            <div class="card-header">
+                <span class="rank-icon">👑</span>
+                <div class="name-title-group">
+                    <h2>王京浩 (浩哥)</h2>
+                    <span class="level">不朽神话</span>
+                </div>
+            </div>
+            <p class="title-game">称号: 滨城数码帝王，生活品质天尊，萌宠双持大师，资产配置教科书，全领域制霸者</p>
+            
+            <h3>核心装备 & 成就清单:</h3>
+            <ul>
+                <li><strong>座驾:</strong> 红标思域 (及自有车位/无贷)</li>
+                <li><strong>房产:</strong> 大连中心位置·无贷豪宅</li>
+                <li><strong>伴侣:</strong> 媳妇 (将订婚)</li>
+                <li><strong>萌宠天团:</strong> 猫 x2 (及自动猫砂盆)</li>
+                <li><strong>算力核心:</strong> RTX 5080 显卡</li>
+                <li><strong>主机舰队:</strong> PS5, Nintendo Switch, Steam Deck</li>
+                <li><strong>影音帝国:</strong> 索尼/苹果耳机, Sonos/JBL音响, 富士/佳能/索尼相机, 苹果平板, OPPO折叠屏, 雷鸟AR眼镜</li>
+                <li><strong>收藏王国:</strong> 海量手办 (信仰无价)</li>
+                <li><strong>视界无疆:</strong> 86寸 & 55寸电视, **一打显示器** (视觉制霸)</li>
+                <li><strong>智能管家:</strong> 石头全家桶(洗衣/烘干/洗碗/扫地/洗地机), 文石电纸书</li>
+                <li><strong>世界旅者:</strong> 日本等多国出行经历</li>
+                <li>... 及其他众多未列出神装！</li>
+            </ul>
+            <div class="location-bonus">
+                <strong>所在地福利:</strong> 大连 (浪漫海滨 +8, 城市活力 +7, <strong>浩哥专属主场光环 +∞</strong>)
+            </div>
+            <div class="happiness-index">
+                综合幸福指数: <span class="stars">✨✨✨✨✨ (爆表!)</span>
+            </div>
+        </div>
+
+        <div class="friend-card rank-2">
+            <div class="card-header">
+                <span class="rank-icon">🥈</span>
+                <div class="name-title-group">
+                    <h2>沈明磊 (磊哥)</h2>
+                    <span class="level">人生赢家Pro</span>
+                </div>
+            </div>
+            <p class="title-game">称号: 盛京准新郎·模玩收藏家·潜力生活家</p>
+
+            <h3>核心装备 & 成就清单:</h3>
+            <ul>
+                <li><strong>座驾:</strong> 比亚迪宋 (及自有车位/无贷)</li>
+                <li><strong>房产:</strong> 沈阳沈北核心发展区房产</li>
+                <li><strong>伴侣:</strong> 媳妇 (将订婚)</li>
+                <li><strong>萌宠:</strong> 有猫一只</li>
+                <li><strong>收藏:</strong> 超级多手办 (信仰珍藏 +15)</li>
+                <li><strong>影音:</strong> X寸神秘巨幕电视 (影音体验 +?)</li>
+            </ul>
+             <div class="location-bonus">
+                <strong>所在地福利:</strong> 沈阳 (历史底蕴 +7, 发展潜力 +8, <strong>沈北新区潜力股加成 +5</strong>)
+            </div>
+            <div class="happiness-index">
+                综合幸福指数: <span class="stars">⭐⭐⭐⭐⭐✨</span>
+            </div>
+        </div>
+
+        <div class="friend-card rank-3">
+            <div class="card-header">
+                <span class="rank-icon">🥉</span>
+                <div class="name-title-group">
+                    <h2>王家辉</h2>
+                     <span class="level">稳健基石</span>
+                </div>
+            </div>
+            <p class="title-game">称号: 铁饭碗守护者，学术新星</p>
+
+            <h3>核心装备 & 成就清单:</h3>
+            <ul>
+                <li><strong>学历:</strong> 硕士文凭 (智力 +10, 社会声望 +5)</li>
+                <li><strong>职业:</strong> 公务员 (稳定 +15, 社会贡献 +8)</li>
+                <li><strong>家庭:</strong> 有媳妇 (情感慰藉 +12, 家庭责任 +7)</li>
+            </ul>
+            <div class="location-bonus">
+                <strong>所在地福利:</strong> 葫芦岛 (宁静生活 +5)
+            </div>
+            <div class="happiness-index">
+                综合幸福指数: <span class="stars">⭐⭐⭐✨</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        <p><strong>郑重声明：</strong>本榜单及所有数据均基于友好娱乐精神，具体幸福以个人实际感受为准！</p>
+        <p>祝各位兄弟友谊长存，幸福永驻！ (GM友情制作)</p>
+    </div>
+
+</body>
+</html>
