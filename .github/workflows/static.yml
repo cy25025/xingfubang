@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宇宙第一·好哥们幸福榜</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #cbebff 70%, #a1d9ff 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .leaderboard-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #005A9C;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .leaderboard-title h1 {
+            font-size: 2.8em;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .leaderboard-title p {
+            font-size: 1.1em;
+            color: #007BFF;
+            margin-top: 0;
+        }
+        .leaderboard-title .last-updated {
+            font-size: 0.8em;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .leaderboard-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .friend-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 90, 156, 0.15);
+            padding: 20px 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 10px solid;
+        }
+
+        .friend-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 12px 35px rgba(0, 90, 156, 0.2);
+        }
+
+        .rank-1 { border-left-color: #FFD700; /* Gold */ }
+        .rank-2 { border-left-color: #C0C0C0; /* Silver */ }
+        .rank-3 { border-left-color: #CD7F32; /* Bronze */ }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .rank-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+
+        .name-title-group h2 {
+            margin: 0;
+            font-size: 1.8em;
+            color: #1A237E;
+        }
+        .name-title-group .level {
+            font-size: 0.9em;
+            color: #555;
+            font-style: italic;
+            background-color: #e6f7ff;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .friend-card .title-game {
+            font-weight: bold;
+            color: #E65100;
+            font-size: 1em;
+            margin-bottom: 15px; /* Increased margin */
+        }
+
+        /* Styling for <details> and <summary> */
+        details {
+            margin-top: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #e0e6ed;
+        }
+
+        summary {
+            font-weight: bold;
+            color: #005A9C;
+            padding: 12px 15px;
+            cursor: pointer;
+            outline: none;
+            border-radius: 8px 8px 0 0; /* Rounded top corners if details is open */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+        
+        summary:hover {
+            background-color: #eef7ff;
+        }
+
+        details[open] summary {
+            background-color: #e0f0ff;
+        }
+
+        summary::after { /* Custom dropdown arrow */
+            content: '▼'; /* Down arrow */
+            font-size: 0.8em;
+            color: #005A9C;
+            transition: transform 0.3s ease;
+        }
+
+        details[open] summary::after {
+            transform: rotate(180deg); /* Up arrow */
+        }
+        
+        .equipment-list {
+            list-style: none;
+            padding: 10px 15px 15px 15px; /* Padding inside the details content */
+            margin: 0;
+            background-color: #fff; /* White background for the list itself */
+            border-top: 1px solid #d1e0ee;
+            border-radius: 0 0 8px 8px; /* Rounded bottom corners */
+        }
+
+        .equipment-list li {
+            padding: 9px 12px;
+            border-radius: 6px;
+            margin-bottom: 7px;
+            font-size: 0.95em;
+            color: #444;
+            border-left: 3px solid #007BFF;
+            background-color: #f0f8ff; /* Light blue background for items */
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .equipment-list li:hover {
+            background-color: #d6eaff;
+            transform: translateX(3px);
+        }
+        .equipment-list li strong {
+            color: #0056b3;
+        }
+
+        .location-bonus {
+            font-size: 0.9em;
+            color: #28a745;
+            margin-top: 15px;
+            padding: 8px 10px;
+            background-color: #e9f5ee;
+            border-radius: 5px;
+        }
+        .location-bonus strong {
+            color: #1e7e34;
+        }
+
+        .happiness-index {
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .happiness-index .stars {
+            color: #FFC107;
+            letter-spacing: 2px;
+        }
+
+        .interaction-zone {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 900px;
+        }
+        .interaction-zone h3 {
+            color: #005A9C;
+            margin-bottom: 15px;
+        }
+        .interaction-zone p {
+            font-size: 1em;
+            color: #555;
+            line-height: 1.6;
+        }
+        .update-button {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+        }
+        .update-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,123,255,0.4);
+        }
+
+
+        .footer-note {
+            text-align: center;
+            margin-top: 30px; /* Adjusted margin */
+            font-size: 0.9em;
+            color: #777;
+        }
+        .footer-note strong {
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .leaderboard-title h1 {
+                font-size: 2.2em;
+            }
+            .friend-card {
+                padding: 15px;
+            }
+            .name-title-group h2 {
+                font-size: 1.5em;
+            }
+            .rank-icon {
+                font-size: 2em;
+            }
+            summary {
+                padding: 10px;
+            }
+            .equipment-list {
+                padding: 10px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="leaderboard-title">
+        <h1>宇宙第一·好哥们幸福榜</h1>
+        <p>当前版本: V3.1 交互体验升级!</p>
+        <p class="last-updated">最后更新: <span id="timestamp"></span></p>
+        </div>
+
+    <div class="leaderboard-container">
+
+        <div class="friend-card rank-1">
+            <div class="card-header">
+                <span class="rank-icon">👑</span>
+                <div class="name-title-group">
+                    <h2>王京浩 (浩哥)</h2>
+                    <span class="level">不朽神话</span>
+                </div>
+            </div>
+            <p class="title-game">称号: 滨城数码帝王，生活品质天尊，萌宠双持大师，资产配置教科书，全领域制霸者</p>
+            
+            <details>
+                <summary>查看浩哥的究极神装清单 ✨</summary>
+                <ul class="equipment-list">
+                    <li><strong>座驾:</strong> 红标思域 (及自有车位/无贷)</li>
+                    <li><strong>房产:</strong> 大连中心位置·无贷豪宅</li>
+                    <li><strong>伴侣:</strong> 媳妇 (已订婚)</li> <li><strong>萌宠天团:</strong> 猫 x2 (及自动猫砂盆)</li>
+                    <li><strong>算力核心:</strong> RTX 5080 显卡</li>
+                    <li><strong>主机舰队:</strong> PS5, Nintendo Switch, Steam Deck</li>
+                    <li><strong>影音帝国:</strong> 索尼/苹果耳机, Sonos/JBL音响, 富士/佳能/索尼相机, 苹果平板, OPPO折叠屏, 雷鸟AR眼镜</li>
+                    <li><strong>收藏王国:</strong> 海量手办 (信仰无价)</li>
+                    <li><strong>视界无疆:</strong> 86寸 & 55寸电视, **一打显示器** (视觉制霸)</li>
+                    <li><strong>智能管家:</strong> 石头全家桶(洗衣/烘干/洗碗/扫地/洗地机), 文石电纸书</li>
+                    <li><strong>世界旅者:</strong> 日本等多国出行经历</li>
+                    <li>... 及其他众多未列出神装！</li>
+                </ul>
+            </details>
+
+            <div class="location-bonus">
+                <strong>所在地福利:</strong> 大连 (浪漫海滨 +8, 城市活力 +7, <strong>浩哥专属主场光环 +∞</strong>)
+            </div>
+            <div class="happiness-index">
+                综合幸福指数: <span class="stars">✨✨✨✨✨ (爆表!)</span>
+            </div>
+        </div>
+
+        <div class="friend-card rank-2">
+            <div class="card-header">
+                <span class="rank-icon">🥈</span>
+                <div class="name-title-group">
+                    <h2>沈明磊 (磊哥)</h2>
+                    <span class="level">人生赢家Pro</span>
+                </div>
+            </div>
+            <p class="title-game">称号: 盛京准新郎·模玩收藏家·潜力生活家</p>
+
+            <details>
+                <summary>查看磊哥的Pro级装备 💪</summary>
+                <ul class="equipment-list">
+                    <li><strong>座驾:</strong> 比亚迪宋 (及自有车位/无贷)</li>
+                    <li><strong>房产:</strong> 沈阳沈北核心发展区房产</li>
+                    <li><strong>伴侣:</strong> 媳妇 (已订婚)</li> <li><strong>萌宠:</strong> 有猫一只</li>
+                    <li><strong>收藏:</strong> 超级多手办 (信仰珍藏 +15)</li>
+                    <li><strong>影音:</strong> X寸神秘巨幕电视 (影音体验 +?)</li>
+                </ul>
+            </details>
+
+             <div class="location-bonus">
+                <strong>所在地福利:</strong> 沈阳 (历史底蕴 +7, 发展潜力 +8, <strong>沈北新区潜力股加成 +5</strong>)
+            </div>
+            <div class="happiness-index">
+                综合幸福指数: <span class="stars">⭐⭐⭐⭐⭐✨</span>
+            </div>
+        </div>
+
+        <div class="friend-card rank-3">
+            <div class="card-header">
+                <span class="rank-icon">🥉</span>
+                <div class="name-title-group">
+                    <h2>王家辉</h2>
+                     <span class="level">稳健基石</span>
+                </div>
+            </div>
+            <p class="title-game">称号: 铁饭碗守护者，学术新星</p>
+            
+            <details>
+                <summary>查看家辉的稳健基石配置 🚀</summary>
+                <ul class="equipment-list">
+                    <li><strong>学历:</strong> 硕士文凭 (智力 +10, 社会声望 +5)</li>
+                    <li><strong>职业:</strong> 公务员 (稳定 +15, 社会贡献 +8)</li>
+                    <li><strong>家庭:</strong> 有媳妇 (情感慰藉 +12, 家庭责任 +7)</li>
+                </ul>
+            </details>
+
+            <div class="location-bonus">
+                <strong>所在地福利:</strong> 葫芦岛 (宁静生活 +5)
+            </div>
+            <div class="happiness-index">
+                综合幸福指数: <span class="stars">⭐⭐⭐✨</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="interaction-zone">
+        <h3>GM 互动中心</h3>
+        <p>兄弟们，发现装备更新、幸福度飙升、或想发起“幸福挑战”？</p>
+        <p>请立即联系本榜单的<strong>首席GM (就是你，这段代码的维护者!)</strong> 进行情报更新！</p>
+        <a href="mailto:your_email@example.com?subject=幸福榜情报更新申请" class="update-button">邮件联系GM爆料/更新</a>
+        <p style="font-size:0.8em; margin-top:10px;">(提示: 上方按钮会尝试打开你的邮件客户端。你也可以通过微信/QQ等方式直接联系GM！)</p>
+    </div>
+
+    <div class="footer-note">
+        <p><strong>郑重声明：</strong>本榜单及所有数据均基于友好娱乐精神，具体幸福以个人实际感受为准！</p>
+        <p>祝各位兄弟友谊长存，幸福永驻！ (GM友情制作)</p>
+    </div>
+
+    <script>
+        // Simple script to set the "last updated" timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            // For Chinese locale, you might prefer:
+            // const formattedDate = now.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }) + ' ' + now.toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'});
+            // Using a simpler ISO-like format for broader compatibility if locale string is an issue:
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const formattedDate = `${year}年${month}月${day}日 ${hours}:${minutes}`;
+            
+            const timestampElement = document.getElementById('timestamp');
+            if (timestampElement) {
+                timestampElement.textContent = formattedDate;
+            }
+        }
+        updateTimestamp(); // Call the function when the page loads
+    </script>
+
+</body>
+</html>
